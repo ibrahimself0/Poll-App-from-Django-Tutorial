@@ -1,0 +1,65 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Polls · Vote now{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <span class="eyebrow">Community polls</span>
+        <h1>What's on your mind?</h1>
+        <p>Pick a question below and cast your vote. See what everyone thinks.</p>
+    </div>
+    <div class="hero-illustration" aria-hidden="true">
+        <svg width="150" height="130" viewBox="0 0 150 130" fill="none">
+            <rect x="6" y="10" width="138" height="110" rx="16" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.3)"/>
+            <rect x="26" y="38" width="98" height="9" rx="4.5" fill="rgba(255,255,255,.7)"/>
+            <rect x="26" y="58" width="70" height="9" rx="4.5" fill="rgba(255,255,255,.4)"/>
+            <rect x="26" y="86" width="98" height="12" rx="6" fill="rgba(255,255,255,.22)"/>
+            <rect x="26" y="86" width="62" height="12" rx="6" fill="#fff"/>
+            <circle cx="112" cy="30" r="10" fill="rgba(255,255,255,.25)"/>
+        </svg>
+    </div>
+</section>
+
+<div class="section-heading">
+    <h2>Latest polls</h2>
+    <span class="count-pill">{{ latest_question_list|length }} available</span>
+</div>
+
+{% if latest_question_list %}
+    <div class="poll-list">
+    {% for question in latest_question_list %}
+        <a class="poll-card" href="{% url 'polls:detail' question.id %}">
+            <div class="poll-card-top">
+                <span class="poll-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                </span>
+                {% if question.was_published_recently %}<span class="badge badge-new">New</span>{% endif %}
+            </div>
+            <h3>{{ question.question_text }}</h3>
+            <div class="poll-card-footer">
+                <span class="meta">Published {{ question.pub_date|date:"M d, Y" }}</span>
+                <span class="card-action">
+                    Vote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+            </svg>
+        </div>
+        <h2>No polls yet</h2>
+        <p>Check back soon — new questions will show up here.</p>
+    </div>
+{% endif %}
+{% endblock %}
